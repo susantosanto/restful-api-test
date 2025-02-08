@@ -20,6 +20,14 @@ const getUserById = async (id) => {
     });
 }
 
+const userCount = async (id) => {
+    return prisma.user.count({
+        where: {
+            id: id
+        }
+    });
+}
+
 const getAllUser = async () => {
     return prisma.user.findMany();
 }
@@ -50,6 +58,7 @@ const deleteUser = async (id) => {
 export default {
     createUser,
     getAllUser,
+    userCount,
     getUserById,
     updateUser,
     deleteUser
