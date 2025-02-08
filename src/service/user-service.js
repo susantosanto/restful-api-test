@@ -26,10 +26,10 @@ const registerUserService = async (request) => {
 const loginUserService = async (request) => {
     const loginRequest = validate(loginUserValidation, request);
 
-    const userLogin = await userRepository.getUserById(loginRequest.id);
+    const userLogin = await userRepository.getUserById(loginRequest.email);
 
     if (!userLogin) {
-        throw new ResponseError(401, `User with id ${loginRequest.id} not found`);
+        throw new ResponseError(401, `User with id ${loginRequest.email} not found`);
     }
 
     const isPasswordValid = await bcrypt.compare(loginRequest.password, userLogin.password);
@@ -38,7 +38,7 @@ const loginUserService = async (request) => {
     }
 
     const token = jwt.sign(
-        {id: userLogin.id, name: userLogin.name},
+        {id: userLogin.id, email: userLogin.email},
         process.env.JWT_SECRET,
         {expiresIn: process.env.JWT_EXPIRES_IN}
     );
@@ -49,20 +49,20 @@ const loginUserService = async (request) => {
 
 const updateUserService = async (id, request) => {
     const user = validate(updateUserValidation, request);
-    const contactExist = await userRepository.userCount(id);
+    const contactExist = await userRepository.userCount(parseInt(id));
     if (contactExist !== 1) {
         throw new ResponseError(401, `user with id ${id} not found`);
     }
-    return userRepository.updateUser(id, user);
+    return userRepository.updateUser(parseInt(id), user);
 }
 
 const deleteUserService = async (id) => {
-    const userCount = await userRepository.userCount(id);
+    const userCount = await userRepository.userCount(parseInt(id));
     if (userCount !== 1) {
         throw new ResponseError(404, `user with id ${id} not found`);
     }
 
-    return userRepository.deleteUser(id);
+    return userRepository.deleteUser(parseInt(id));
 }
 
 export default {

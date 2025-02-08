@@ -5,17 +5,16 @@ const createUser = async (data) => {
         data: data,
         select: {
             id: true,
-            name: true,
             email: true,
             createdAt: true,
         }
     });
 }
 
-const getUserById = async (id) => {
+const getUserById = async (email) => {
     return prisma.user.findUnique({
         where: {
-            id: id
+            email: email
         }
     });
 }
@@ -40,7 +39,6 @@ const updateUser = async (id, data) => {
         data: data,
         select: {
             id: true,
-            name: true,
             email: true,
             updatedAt: true
         }

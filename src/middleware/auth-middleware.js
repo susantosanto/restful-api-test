@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import {ResponseError} from "../error/response-error.js";
 
 const authMiddleware = (req, res, next) => {
-    const authHeader = req.header.authorization;
+    const authHeader = req.headers.authorization;
     if (!authHeader) {
         throw new ResponseError(401, 'Authorization headers is missing');
     }
